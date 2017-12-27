@@ -4,17 +4,19 @@
 // 引入作为全局对象储存空间的global.js, js文件可以省略后缀
 import g from './global'
 
-// 引入页面文件
-import foo from './views/foo'
-import bar from './views/bar'
-import popPage from './views/popPage'
+// 引入模块文件
+import foo from './module/foo'
+import bar from './module/bar'
+import popPage from './module/popPage'
+import worker from './module/worker'
 
 import './style.css'
 
 const routes = {
   '/foo': foo,
   '/bar': bar,
-  '/popPage': popPage
+  '/popPage': popPage,
+  '/worker': worker
 }
 
 // Router类, 用来控制页面根据当前URL切换
@@ -50,8 +52,8 @@ class Router {
 // new一个路由对象, 赋值为g.router, 这样我们在其他js文件中可以引用到
 g.router = new Router()
 // 启动
-// g.router.start()
+g.router.start()
 
-popPage.init()
+// popPage.init()
 
 window.popPage = popPage

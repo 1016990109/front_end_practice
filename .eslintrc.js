@@ -17,5 +17,6 @@ module.exports = {
     // overrides
     "rules": {
         // ...
+      'no-console': 'off',
     }
 }
