@@ -13,6 +13,9 @@ import template from './index.html'
 import './style.css'
 
 import $ from 'zepto'
+import promise from '../../promise/index'
+
+promise
 
 // 导出类
 export default class {

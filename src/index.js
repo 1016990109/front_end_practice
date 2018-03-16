@@ -3,6 +3,7 @@
  */
 // 引入作为全局对象储存空间的global.js, js文件可以省略后缀
 import g from './global'
+import 'babel-polyfill'
 
 // 引入模块文件
 import foo from './module/foo'

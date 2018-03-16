@@ -1,17 +1,26 @@
 const {resolve} = require('path')
+const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
   // 配置页面入口js文件
-  entry: './src/index.js',
+  entry: {
+    index: ['./src/index.js'],
+    vendor: ['underscore']
+  },
 
   // 配置打包输出相关
   output: {
     // 打包输出目录
-    path: resolve(__dirname, 'dist'),
+    path: resolve(__dirname, './dist'),
 
     // 入口js的打包输出文件名
-    filename: 'index.js'
+    filename: '[name].[hash:6].js',
+
+    publicPath: '',
+
+    //chunk文件输出
+    chunkFilename: "[name].[hash:6].js",
   },
 
   module: {
@@ -125,7 +134,17 @@ module.exports = {
        html-webpack-plugin也可以不指定template参数, 它会使用默认的html模板.
        */
       template: './src/index.html'
-    })
+    }),
+
+    new webpack.HashedModuleIdsPlugin(),
+
+    new webpack.optimize.CommonsChunkPlugin({
+      names: ['vendor'],
+    }),
+
+    // new webpack.optimize.CommonsChunkPlugin({
+    //   name: 'runtime'
+    // }),
   ],
 
 
@@ -149,6 +168,8 @@ module.exports = {
 
      配置为true, 当访问的文件不存在时, 返回根目录下的index.html文件
      */
-    historyApiFallback: true
+    historyApiFallback: true,
+
+    contentBase: resolve(__dirname, './src'),  // New
   }
 }

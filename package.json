@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint --ext .js src",
-    "start": "webpack-dev-server -d --hot"
+    "start": "webpack-dev-server -d --hot",
+    "build": "webpack -p"
   },
   "repository": {
     "type": "git",
@@ -23,7 +24,9 @@
   "homepage": "https://github.com/1016990109/front_end_practice#readme",
   "dependencies": {
     "babel-eslint": "^8.0.1",
+    "babel-polyfill": "^6.26.0",
     "echarts": "^3.7.2",
+    "underscore": "^1.8.3",
     "webpack": "latest",
     "zepto": "^1.2.0"
   },
