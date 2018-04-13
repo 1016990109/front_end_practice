@@ -1,6 +1,7 @@
 const {resolve} = require('path')
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
   // 配置页面入口js文件
@@ -15,12 +16,12 @@ module.exports = {
     path: resolve(__dirname, './dist'),
 
     // 入口js的打包输出文件名
-    filename: '[name].[hash:6].js',
+    filename: '[name].[chunkhash:6].js',
 
     publicPath: '',
-
+    //
     //chunk文件输出
-    chunkFilename: "[name].[hash:6].js",
+    chunkFilename: "[name].[chunkhash:6].js",
   },
 
   module: {
@@ -136,15 +137,36 @@ module.exports = {
       template: './src/index.html'
     }),
 
+    //让moduleId不变，这样第三方库vendor的hash值才不变
     new webpack.HashedModuleIdsPlugin(),
 
     new webpack.optimize.CommonsChunkPlugin({
-      names: ['vendor'],
+      name: "vendor"
     }),
 
-    // new webpack.optimize.CommonsChunkPlugin({
-    //   name: 'runtime'
-    // }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'manifest'
+    }),
+
+    //npm 包分析工具
+    // new BundleAnalyzerPlugin(),
+
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: false,
+        drop_console: true,
+        pure_funcs: ['console.log']
+      },
+      sourceMap: false
+    }),
+
+    new webpack.optimize.ModuleConcatenationPlugin(),
+
+    //推荐使用的第三方库打包方式
+    // new webpack.DllReferencePlugin({
+    //   context: __dirname,
+    //   manifest: require('./dist/manifest.json')
+    // })
   ],
 
 

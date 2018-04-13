@@ -5,6 +5,7 @@
         "browsers": ["chrome >= 58"]
       },
       "useBuiltIns": true
-    }]
+    }],
+    "es2015"
   ]
 }
