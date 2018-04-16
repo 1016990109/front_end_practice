@@ -10,7 +10,9 @@ let app = express()
 app.use(express.static('public'))
 
 //解析内容
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 app.use(bodyParser.json());
 
 //使用cookie
@@ -34,9 +36,22 @@ app.post('/addUser', (req, res) => {
   fs.readFile(__dirname + '/' + 'users.json', 'utf8', (err, data) => {
     let users = JSON.parse(data)
     let form = new multiparty.Form()
-    let newUser = req.body
+    let newUser = {}
     form.parse(req, (err, fields, files) => {
-      fields
+      newUser.id = fields.id[0]
+      newUser.name = fields.name[0]
+      newUser.password = fields.password[0]
+      newUser.profession = fields.profession[0]
+      users[fields.name] = newUser
+      let usersStr = JSON.stringify(users)
+      fs.writeFile(__dirname + '/' + 'users.json', usersStr, (err) => {
+        if (err) {
+          console.log('write error in addUser!')
+          res.end('error')
+        } else {
+          res.end(usersStr)
+        }
+      })
     })
   })
 })
