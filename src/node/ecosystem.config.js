@@ -32,17 +32,17 @@ module.exports = {
       user : 'hongchuanwang',
       host : 'localhost',
       ref  : 'origin/master',
-      repo : 'git@github.com:repo.git',
+      repo : 'git@github.com:1016990109/front_end_practice.git',
       path : '/Users/hongchuanwang/github/test',
-      'post-deploy' : 'pm2 reload ecosystem.config.js --env production'
+      'post-deploy' : 'pm2 reload src/node/ecosystem.config.js --env production'
     },
     dev : {
       user : 'hongchuanwang',
       host : 'localhost',
       ref  : 'origin/master',
-      repo : 'git@github.com:repo.git',
+      repo : 'git@github.com:1016990109/front_end_practice.git',
       path : '/Users/hongchuanwang/github/test',
-      'post-deploy' : 'pm2 reload ecosystem.config.js --env dev',
+      'post-deploy' : 'pm2 reload src/node/ecosystem.config.js --env dev',
       env  : {
         NODE_ENV: 'dev'
       }
