@@ -39,7 +39,7 @@ const tasks2 = [
     }, 1000)
   },
   callback => {
-    setTimeout(() => {
+    setTimeout(() => {``
       console.log('taks 2 has completed')
       callback(new Error('test'))
     }, 2000)
