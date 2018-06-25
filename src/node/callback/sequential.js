@@ -1,32 +1,38 @@
-function iterateSeries(tasks, iteratorCallback, finalCallback, initInput) {
-  iteratorCallback = iteratorCallback || function() {}
+let currying = function(fn) {
+  let args = [];
 
-  finalCallback = finalCallback || function() {}
-
-  if (!(tasks instanceof Array)) {
-    return finalCallback(new Error('tasks is not an Array'))
+  return function() {
+    if (arguments.length === 0) {
+      return fn.apply(this, args); // 没传参数时，调用这个函数
+    } else {
+      [].push.apply(args, arguments); // 传入了参数，把参数保存下来
+      return arguments.callee; // 返回这个函数的引用
+    }
   }
+}
 
-  function iterate(lastResult, index) {
+let iterateSeries = currying(function() {
+  let tasks = arguments
+
+  let iterate = (lastResult, index) => {
+    lastResult = lastResult || ''
+
     if (index == tasks.length) {
-      //there is no task to process
-      return finalCallback('All tasks have completed.')
+      return
     }
 
-    const task = tasks[index]
-    task(lastResult, (err, result) => {
+    tasks[index](lastResult, (err, result) => {
       if (err) {
-        iteratorCallback(err)
+        console.log(err)
         return
       }
 
-      iteratorCallback(null, result)
-      //pass the task result to next task
+      console.log(result)
       iterate(result, index + 1)
     })
   }
 
-  iterate(initInput, 0)
-}
+  iterate(null, 0)
+})
 
 module.exports = iterateSeries

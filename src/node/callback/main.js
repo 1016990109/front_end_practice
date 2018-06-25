@@ -21,15 +21,18 @@ const tasks = [
   }
 ]
 
-sequential(tasks, (err, message) => {
-  if (err) {
-    return
-  }
+//curry
+sequential(tasks[0])(tasks[1])(tasks[2])()
 
-  console.log(`[iterator callback]: ${message}`)
-}, message => {
-  console.log(`[final callback]: ${message}`)
-})
+// sequential(tasks, (err, message) => {
+//   if (err) {
+//     return
+//   }
+
+//   console.log(`[iterator callback]: ${message}`)
+// }, message => {
+//   console.log(`[final callback]: ${message}`)
+// })
 
 const tasks2 = [
   callback => {
