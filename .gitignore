@@ -3,3 +3,4 @@ node_modules/*
 dist/
 src/test/test1.js
 src/test/test2.js
+*.DS_Store

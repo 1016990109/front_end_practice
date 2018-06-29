@@ -2,8 +2,9 @@
 
 const sequential = require('./sequential')
 const parallel = require('./parallel')
+const promisify = require('../promise/promisify').promisify
 
-const tasks = [
+let tasks = [
   (input, callback) => {
     setTimeout(() => {
       callback(null, 'task 1 success')
@@ -21,18 +22,20 @@ const tasks = [
   }
 ]
 
+for(let i = 0; i < tasks.length; i++) {
+  tasks[i] = promisify(tasks[i])
+}
+
+let promise = tasks.reduce((pre, task) => {
+  return pre.then(res => {
+    return task(res)
+  })
+}, Promise.resolve())
+
+promise.then(res => console.log(res))
+
 //curry
 sequential(tasks[0])(tasks[1])(tasks[2])()
-
-// sequential(tasks, (err, message) => {
-//   if (err) {
-//     return
-//   }
-
-//   console.log(`[iterator callback]: ${message}`)
-// }, message => {
-//   console.log(`[final callback]: ${message}`)
-// })
 
 const tasks2 = [
   callback => {
