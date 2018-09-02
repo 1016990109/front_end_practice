@@ -7,7 +7,7 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
 module.exports = merge(common, {
   plugins: [
     //npm 包分析工具
-    // new BundleAnalyzerPlugin(),
+    new BundleAnalyzerPlugin(),
 
     new webpack.optimize.UglifyJsPlugin({
       compress: {
