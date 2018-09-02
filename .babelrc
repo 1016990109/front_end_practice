@@ -2,7 +2,7 @@
   "presets": [
     ["env", {
       "targets": {
-        "browsers": [ ">0.01%", "not op_mini all"],
+        "browsers": ["> 5% in CN"],
         "uglify": true
       },
       "useBuiltIns": true,
