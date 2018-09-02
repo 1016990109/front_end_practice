@@ -13,15 +13,24 @@ import template from './index.html'
 import './style.css'
 
 import $ from 'zepto'
-import promise from '../../promise/index'
-
-promise
+import '../../promise/index'
+import * as _ from 'underscore'
 
 // 导出类
 export default class {
   mount(container) {
     document.title = 'foo'
     container.innerHTML = template
+    _.assign({}, {'test' : 2})
+    //测试懒加载
+    container.querySelector('#lazy_load').addEventListener('click', () => {
+      import(/* webpackChunkName: "print" */ './print').then(module => {
+        let print = module.default
+        print()
+      })
+
+      import('../common/common')
+    })
     container.querySelector('.foo__gobar').addEventListener('click', () => {
       // 调用router.go方法加载 /bar 页面
       // g.router.go('/bar')

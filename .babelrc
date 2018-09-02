@@ -2,10 +2,12 @@
   "presets": [
     ["env", {
       "targets": {
-        "browsers": ["chrome >= 58"]
+        "browsers": [ ">0.01%", "not op_mini all"],
+        "uglify": true
       },
-      "useBuiltIns": true
-    }],
-    "es2015"
-  ]
+      "useBuiltIns": true,
+      "debug": false
+    }]
+  ],
+  "plugins": ["dynamic-import-webpack"]
 }

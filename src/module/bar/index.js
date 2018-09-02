@@ -11,9 +11,12 @@ import template from './index.html'
 // 引入css, 会生成<style>块插入到<head>头中
 import './style.css'
 
+import * as _ from 'underscore'
+
 // 导出类
 export default class {
   mount(container) {
+    console.log(_.findIndex([1,2,3], 1, this))
     document.title = 'bar'
     container.innerHTML = template
     container.querySelector('.bar__gofoo').addEventListener('click', () => {

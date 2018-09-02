@@ -1,8 +1,10 @@
 <div class="foo">
     <h1>Page Foo</h1>
     <a href="javascript:" class="foo__gobar">goto bar</a>
+    <button id="lazy_load">lazy load</button>
 
     <p>
+      <img src="./small.jpg" >
         <!--
         小于10kb的图片, <img>标签的src被编译为Data URI格式
         <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAA...">
@@ -11,6 +13,7 @@
     </p>
 
     <p>
+      <img src="./large.png" alt="">
         <!--
         大于10kb的图片, 图片会被储存到输出目录, src会被替换为打包后的路径
         <img src="/assets/f78661bef717cf2cc2c2e5158f196384.png">

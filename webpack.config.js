@@ -1,13 +1,17 @@
-const {resolve} = require('path')
+const { resolve } = require('path')
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const CleanWebpackPlugin = require('clean-webpack-plugin')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+  .BundleAnalyzerPlugin
+
+const isDev = process.env.NODE_ENV !== 'production'
 
 module.exports = {
   // 配置页面入口js文件
   entry: {
     index: ['./src/index.js'],
-    vendor: ['underscore']
+    polyfill: './src/polyfill.js'
   },
 
   // 配置打包输出相关
@@ -16,12 +20,12 @@ module.exports = {
     path: resolve(__dirname, './dist'),
 
     // 入口js的打包输出文件名
-    filename: '[name].[chunkhash:6].js',
+    filename: `[name].${isDev ? '' : '[chunkhash:8]'}.js`,
 
     publicPath: '',
-    //
+
     //chunk文件输出
-    chunkFilename: "[name].[chunkhash:6].js",
+    chunkFilename: `[name].${isDev ? '' : '[chunkhash:8]'}.chunk.js`
   },
 
   module: {
@@ -79,34 +83,39 @@ module.exports = {
       },
 
       {
-        /*
-         匹配各种格式的图片和字体文件
-         上面html-loader会把html中<img>标签的图片解析出来, 文件名匹配到这里的test的正则表达式,
-         css-loader引用的图片和字体同样会匹配到这里的test条件
-         */
-        test: /\.(png|jpg|jpeg|gif|eot|ttf|woff|woff2|svg|svgz)(\?.+)?$/,
-
-        /*
-         使用url-loader, 它接受一个limit参数, 单位为字节(byte)
-
-         当文件体积小于limit时, url-loader把文件转为Data URI的格式内联到引用的地方
-         当文件大于limit时, url-loader会调用file-loader, 把文件储存到输出目录, 并把引用的文件路径改写成输出后的路径
-
-         比如 views/foo/index.html中
-         <img src="smallpic.png">
-         会被编译成
-         <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAA...">
-
-         而
-         <img src="largepic.png">
-         会被编译成
-         <img src="/f78661bef717cf2cc2c2e5158f196384.png">
-         */
+        test: /\.(png|jpg|jpeg|gif|eot|ttf|woff|woff2|svg|svgz)$/i,
         use: [
           {
             loader: 'url-loader',
             options: {
-              limit: 10000
+              limit: 10000 /* 图片大小小于1000字节限制时会自动转成 base64 码引用*/
+            }
+          },
+
+          {
+            loader: 'image-webpack-loader',
+            options: {
+              disable: isDev, //develop 模式关闭图片压缩
+              mozjpeg: {
+                progressive: true,
+                quality: 65
+              },
+              // optipng.enabled: false will disable optipng
+              optipng: {
+                enabled: false
+              },
+              pngquant: {
+                quality: '65-90',
+                speed: 4
+              },
+              gifsicle: {
+                interlaced: false
+              }
+              // the webp option will enable WEBP
+              //safari 不支持webp
+              // webp: {
+              //   quality: 75
+              // }
             }
           }
         ]
@@ -120,6 +129,7 @@ module.exports = {
    而plugin, 关注的不是文件的格式, 而是在编译的各个阶段, 会触发不同的事件, 让你可以干预每个编译阶段.
    */
   plugins: [
+    new CleanWebpackPlugin(['dist']),
     /*
      html-webpack-plugin用来打包入口html文件
      entry配置的入口是js文件, webpack以js文件为入口, 遇到import, 用配置的loader加载引入文件
@@ -137,15 +147,29 @@ module.exports = {
       template: './src/index.html'
     }),
 
+    // new webpack.HotModuleReplacementPlugin(),
+
     //让moduleId不变，这样第三方库vendor的hash值才不变
     new webpack.HashedModuleIdsPlugin(),
 
+    //提取公共的库，polyfill单独打包
     new webpack.optimize.CommonsChunkPlugin({
-      name: "vendor"
+      name: 'vendor',
+      chunks: ['index'],
+      minChunks: module => {
+        return module.resource && /node_modules/.test(module.resource)
+      }
+    }),
+
+    //防止代码改动而导致vendor的hash值发生变化
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'manifest',
+      minChunks: Infinity
     }),
 
     new webpack.optimize.CommonsChunkPlugin({
-      name: 'manifest'
+      async: true,
+      children: true
     }),
 
     //npm 包分析工具
@@ -167,8 +191,12 @@ module.exports = {
     //   context: __dirname,
     //   manifest: require('./dist/manifest.json')
     // })
-  ],
 
+    new webpack.EnvironmentPlugin({
+      NODE_ENV: 'development', // use 'development' unless process.env.NODE_ENV is defined
+      DEBUG: false
+    })
+  ],
 
   /*
    配置开发时用的服务器, 让你可以用 http://127.0.0.1:8080/ 这样的url打开页面来调试
@@ -179,19 +207,11 @@ module.exports = {
     // 配置监听端口, 因为8080很常用, 为了避免和其他程序冲突, 我们配个其他的端口号
     port: 8100,
 
-    /*
-     historyApiFallback用来配置页面的重定向
+    hot: true,
 
-     SPA的入口是一个统一的html文件, 比如
-     http://localhost:8010/foo
-     我们要返回给它
-     http://localhost:8010/index.html
-     这个文件
-
-     配置为true, 当访问的文件不存在时, 返回根目录下的index.html文件
-     */
+    //发生错误时重定向
     historyApiFallback: true,
 
-    contentBase: resolve(__dirname, './src'),  // New
+    contentBase: resolve(__dirname, './src') // New
   }
 }
