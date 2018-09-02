@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Page Title</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>
+    const observer = new window.PerformanceObserver(list => {
+        list.getEntries().forEach(({name, startTime}) => {
+            console.log({name, startTime});
+        });
+    });
+
+    observer.observe({
+        entryTypes: ['paint']
+    });
+
+    function sleep(ms = 1000) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    // This triggers first-paint
+    sleep().then(() => document.body.style.backgroundColor = 'lightgrey');
+
+    // This triggers first-contentful-paint
+    sleep(2000).then(() => document.body.innerHTML += '<p>Hi there!</p>');
+</script>
+  <script>
+    const animation = timestamp => console.log('animation called at', timestamp)
+    let scheduledAnimationFrame = false;
+
+    //这里可能会在一帧内都次触发事件，造成重复绘制
+    // window.addEventListener('scroll', () => {
+    //   window.requestAnimationFrame(timestamp => {
+    //     animation(timestamp)
+    //   })
+    // })
+
+    //解决办法
+    const onScroll = () => {
+      if (scheduledAnimationFrame) { return }
+
+      scheduledAnimationFrame = true
+      window.requestAnimationFrame(timestamp => {
+        scheduledAnimationFrame = false
+        animation(timestamp)
+      })
+    }
+    window.addEventListener('scroll', onScroll)
+  </script>
+
+  <link rel="stylesheet" href="main.css">
+</head>
+
+<body>
+
+</body>
+
+</html>
