@@ -6,8 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint --ext .js src",
-    "start": "webpack-dev-server -d --hot",
-    "build": "NODE_ENV='production' webpack -p",
+    "start": "NODE_ENV='development' webpack-dev-server -d --hot --config webpack.config.dev.js",
+    "build": "NODE_ENV='production' webpack -p --config webpack.config.prod.js",
     "analyz": "set NODE_ENV=production && set npm_config_report=true && npm run build",
     "dll": "webpack-cli --config webpack.dll.config.js"
   },
@@ -62,6 +62,7 @@
     "webpack": "^3.8.1",
     "webpack-bundle-analyzer": "^2.11.1",
     "webpack-dev-server": "^2.9.4",
+    "webpack-merge": "^4.1.4",
     "worker-loader": "^1.1.0"
   }
 }
