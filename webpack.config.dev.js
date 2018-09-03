@@ -4,11 +4,23 @@ const merge = require('webpack-merge')
 const common = require('./webpack.config.common')
 
 module.exports = merge(common, {
+  output: {
+    //打包文件不输出路径信息
+    pathInfo: false,
+  },
+
+  //开发时没必要优化
+  optimization: {
+    removeAvailableModules: false,
+    removeEmptyChunks: false,
+    splitChunks: false,
+  },
+
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
   ],
 
-  devtool: 'inline-source-map',
+  devtool: 'cheap-module-eval-source-map',
 
   /*
    配置开发时用的服务器, 让你可以用 http://127.0.0.1:8080/ 这样的url打开页面来调试

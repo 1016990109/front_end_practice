@@ -17,6 +17,8 @@ module.exports = merge(common, {
       },
       sourceMap: true
     }),
+
+    new webpack.optimize.ModuleConcatenationPlugin()
   ],
 
   devtool: 'source-map'

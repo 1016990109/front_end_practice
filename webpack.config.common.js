@@ -168,8 +168,6 @@ module.exports = {
       children: true
     }),
 
-    new webpack.optimize.ModuleConcatenationPlugin(),
-
     new webpack.EnvironmentPlugin({
       NODE_ENV: 'development', // use 'development' unless process.env.NODE_ENV is defined
       DEBUG: false
