@@ -2,11 +2,14 @@ const { resolve } = require('path')
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 const isDev = process.env.NODE_ENV !== 'production'
 
 module.exports = {
-  // 配置页面入口js文件
+  // 基础目录，绝对路径，用于从配置中解析入口起点(entry point)和 loader
+  context: resolve(__dirname, './'),
+  // 配置页面入口js文件，多页面应用则会有多个入口
   entry: {
     index: ['./src/index.js'],
     polyfill: './src/polyfill.js'
@@ -27,12 +30,6 @@ module.exports = {
   },
 
   module: {
-    /*
-     配置各种类型文件的加载器, 称之为loader
-     webpack当遇到import ... 时, 会调用这里配置的loader对引用的文件进行编译
-     */
-    // loaders: [],
-
     rules: [
       {
         test: require.resolve('zepto'),
@@ -77,7 +74,10 @@ module.exports = {
          css-loader将css内容存为js字符串, 并且会把background, @font-face等引用的图片,
          字体文件交给指定的loader打包, 类似上面的html-loader, 用什么loader同样在loaders对象中定义, 等会下面就会看到.
          */
-        use: ['style-loader', 'css-loader']
+        use: ExtractTextPlugin.extract({
+          fallback: "style-loader",
+          use: "css-loader"
+        })
       },
 
       {
@@ -142,8 +142,10 @@ module.exports = {
        可以通过filename参数指定输出的文件名
        html-webpack-plugin也可以不指定template参数, 它会使用默认的html模板.
        */
-      template: './src/index.html'
+      template: './src/index.html',
     }),
+
+    new ExtractTextPlugin("styles.css"),
 
     //让moduleId不变，这样第三方库vendor的hash值才不变
     new webpack.HashedModuleIdsPlugin(),

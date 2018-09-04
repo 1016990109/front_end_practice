@@ -6,10 +6,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint --ext .js src",
-    "start": "NODE_ENV='development' webpack-dev-server -d --hot --config webpack.config.dev.js",
+    "start": "NODE_ENV='development' webpack-dev-server -d --hot --color --config webpack.config.dev.js",
     "build": "NODE_ENV='production' webpack -p --config webpack.config.prod.js",
-    "analyz": "set NODE_ENV=production && set npm_config_report=true && npm run build",
-    "dll": "webpack-cli --config webpack.dll.config.js"
+    "analyze": "npm_config_report=true npm run build",
+    "server": "http-server ./dist -p 8080"
   },
   "repository": {
     "type": "git",
@@ -52,9 +52,11 @@
     "eslint-loader": "^1.9.0",
     "eslint-plugin-html": "^4.0.5",
     "exports-loader": "^0.6.4",
+    "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.5",
     "html-loader": "^0.5.1",
     "html-webpack-plugin": "^2.30.1",
+    "http-server": "^0.11.1",
     "image-webpack-loader": "^4.3.1",
     "script-loader": "^0.7.2",
     "style-loader": "^0.19.0",

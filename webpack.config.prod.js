@@ -4,11 +4,8 @@ const common = require('./webpack.config.common')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
   .BundleAnalyzerPlugin
 
-module.exports = merge(common, {
+const options = {
   plugins: [
-    //npm 包分析工具
-    new BundleAnalyzerPlugin(),
-
     new webpack.optimize.UglifyJsPlugin({
       compress: {
         warnings: false,
@@ -22,4 +19,11 @@ module.exports = merge(common, {
   ],
 
   devtool: 'source-map'
-})
+}
+
+//npm 包分析工具
+if (process.env.npm_config_report) {
+  options.plugins.push(new BundleAnalyzerPlugin())
+}
+
+module.exports = merge(common, options)

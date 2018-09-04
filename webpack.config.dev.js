@@ -4,18 +4,8 @@ const merge = require('webpack-merge')
 const common = require('./webpack.config.common')
 
 module.exports = merge(common, {
-  output: {
-    //打包文件不输出路径信息
-    pathInfo: false,
-  },
-
-  //开发时没必要优化
-  optimization: {
-    removeAvailableModules: false,
-    removeEmptyChunks: false,
-    splitChunks: false,
-  },
-
+  cache: true,
+  
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
   ],
@@ -31,7 +21,23 @@ module.exports = merge(common, {
     // 配置监听端口, 因为8080很常用, 为了避免和其他程序冲突, 我们配个其他的端口号
     port: 8100,
 
+    //启用gzip压缩
+    compress: true,
+
+    //启用HMR(Hot Module Replace)
     hot: true,
+
+    //编译失败不刷新页面
+    hotOnly: true,
+
+    //https提供资源
+    https: true,
+
+    //启动后打开浏览器
+    open: true,
+
+    //默认打开页面
+    openPage: 'foo',
 
     //发生错误时重定向
     historyApiFallback: true,
