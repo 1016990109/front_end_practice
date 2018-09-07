@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint --ext .js src",
-    "start": "NODE_ENV='development' webpack-dev-server -d --hot --color --config webpack.config.dev.js",
+    "start": "NODE_ENV='development' webpack-dev-server -d --color --config webpack.config.dev.js",
     "build": "NODE_ENV='production' webpack -p --config webpack.config.prod.js",
     "analyze": "npm_config_report=true npm run build",
     "server": "http-server ./dist -p 8080"
