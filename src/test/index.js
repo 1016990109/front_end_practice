@@ -84,7 +84,7 @@ console.log(a.sort());
 
 //求和
 var b = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], sum = 0;
-sum = b.slice(0, 10).reduce((preValue, currentValue, currentIndex, array) => {
+sum = b.slice(0, 10).reduce((preValue, currentValue) => {
   return preValue.concat([currentValue + 1])
 }, [])
 
@@ -104,14 +104,29 @@ function Animal() {
   }
 }
 
+function Animal2() {
+  this.animal = 'animal'
+}
+
+Animal2.prototype.sleep2 = function() {
+  console.log('animal2 sleep')
+}
+
 function Cat() {
   Animal.call(this)
+  Animal2.call(this)
   this.name = "cat"
 }
 
-Cat.prototype = new Animal()
+//建议使用Object.create
+Cat.prototype = Object.assign(Object.create(Animal.prototype), Animal2.prototype)
 
-new Cat().sleep()
+
+let cat = new Cat()
+cat.sleep()
+console.log(cat instanceof Animal)
+console.log(cat instanceof Animal2)
+cat.sleep2()
 
 //throttle
 let _ = {}
