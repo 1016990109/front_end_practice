@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "ecstatic": "^3.3.0",
+    "minimist": "^1.2.0",
+    "ws": "^6.1.2",
+    "zmq": "^2.15.3"
+  }
+}
