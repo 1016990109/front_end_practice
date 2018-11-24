@@ -1,6 +1,5 @@
 .idea/
-node_modules/*
+**/node_modules
 dist/
-src/test/test1.js
-src/test/test2.js
+src/test/test*.js
 *.DS_Store
