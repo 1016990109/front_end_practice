@@ -62,7 +62,7 @@
     "style-loader": "^0.19.0",
     "url-loader": "^0.6.2",
     "webpack": "^3.8.1",
-    "webpack-bundle-analyzer": "^2.11.1",
+    "webpack-bundle-analyzer": "^3.8.0",
     "webpack-dev-server": "^2.9.4",
     "webpack-merge": "^4.1.4",
     "worker-loader": "^1.1.0"
