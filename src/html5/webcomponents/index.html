@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Web Components</title>
+</head>
+<body>
+  <!-- 不允许自封闭 -->
+  <app-drawer id="drawer" open="test"/></app-drawer>
+  <!-- 使用自定义组件（继承原生组件）的一种方式 -->
+  <!-- 某些浏览器不推荐使用is -->
+  <button is="custom-button">click</button>
+
+  <share-buttons id="share-buttons">
+    <social-button type="twitter"><a href="...">Twitter</a></social-button>
+    <social-button type="fb"><a href="...">Facebook</a></social-button>
+    <social-button type="plus"><a href="...">G+</a></social-button>
+  </share-buttons>
+
+  <x-foo-from-template></x-foo-from-template>
+
+  <!-- template 是不显示的 -->
+  <template id="x-foo-from-template">
+    <style>
+      p { color: orange; }
+    </style>
+    <p>I'm in Shadow DOM.My markup was stamped from a &lt;template&gt;.</p>
+  </template>
+  
+  <script>
+    customElements.define('x-foo-from-template', class extends HTMLElement {
+      constructor() {
+        super(); // always call super() first in the constructor.
+        let shadowRoot = this.attachShadow({mode: 'open'});
+        const t = document.querySelector('#x-foo-from-template');
+        const instance = t.content.cloneNode(true);
+        shadowRoot.appendChild(instance);
+      }
+    });
+  </script>
+
+  <!-- 创建自定义元素或扩展元素必须在 </body> 前，不允许放在 head 中 -->
+  <script src="./custom-element.js"></script>
+  <script>
+    let drawer = document.getElementById('drawer')
+    // 使用 property
+    drawer.open
+  </script>
+</body>
+</html>
